@@ -1,0 +1,7 @@
+tasks
+
+-move saving game to task queue
+-move  saving game to backend
+-horse's arse
+-add round robin
+-player stats

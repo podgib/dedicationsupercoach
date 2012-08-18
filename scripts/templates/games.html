@@ -1,0 +1,16 @@
+{% extends "templates/layout.html" %}
+{% block content %}
+<h1>Games</h1>
+{% if next_game %}
+<div class=game>
+{% if lockout %}In Progress: {% else %}Next game: {% endif %}<a href="/games/{{next_game.key().id()}}">Dedication vs. {{next_game.opposition}}</a>, {{next_game.date}}</div>
+{% endif %}
+{% for game in past_games %}
+{% if loop.first %}<h2>Completed Games</h2>{% endif %}
+<div class=game><a href="/games/{{game.key().id()}}">Dedication {% if game.result == 'win' %} def. {% elif game.result == 'tie' %} tied with {% elif game.result=='loss' %} def. by {% else %} vs. {% endif %} {{game.opposition}}</a>, {{game.date}}
+{% endfor %}
+{% for game in future_games %}
+{% if loop.first %}<h2>Future Games</h2>{% endif %}
+<div class=game><a href="/games/{{game.key().id()}}">Dedication vs. {{game.opposition}}</a>, {{game.date}}</div>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends 'templates/mobile/layout.html' %}
+{% block title %}
+{{team.team_name}}
+{% endblock %}
+
+{% block content %}
+{% if team.key() != user_meta.key() %}
+  <p>Coach: {{team.first_name}} {{team.surname}}</p>
+{% endif %}
+
+<div class="ui-grid-a">
+    <div class="ui-block-a">
+    View Scores:
+    </div>
+    <div class="ui-block-b">
+        <div data-role="fieldcontain">
+            <select name="roundmenu" id="roundmenu">
+              {% if current_round > 1 %}
+              <option value="" selected></option>
+              {% for i in range(1,current_round) %}
+              <option value="{{i}}">Round {{i}}</option>
+              {% endfor %}
+              {% else %}
+              <option value="" selected>None available</option>
+              {% endif %}
+            </select>
+        </div>
+    </div>
+</div>
+
+<div data-role="collapsible-set" data-mini="true" data-theme="a">
+  <div data-role="collapsible" data-theme="a">
+    <h3>Batsmen</h3>
+    <ul data-role="listview" data-inset="true" data-theme="c">
+      {% for p in batsmen %}
+      <li data-theme="c"><a href="/players/{{p.key().id()}}">{{p.first_name}} {{p.surname}}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div data-role="collapsible"  data-theme="a">
+    <h3>Bowlers</h3>
+    <ul data-role="listview" data-inset="true" data-theme="b">
+      {% for p in bowlers %}
+      <li data-theme="c"><a href="/players/{{p.key().id()}}">{{p.first_name}} {{p.surname}}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div data-role="collapsible"  data-theme="a">
+    <h3>Fielders</h3>
+    <ul data-role="listview" data-inset="true" data-theme="b">
+      {% for p in fielders %}
+      <li data-theme="c"><a href="/players/{{p.key().id()}}">{{p.first_name}} {{p.surname}}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block endscript %}
+$(function()  {
+  $("#roundmenu").change(function() {
+    round=$("#roundmenu option:selected").val();
+    if(round.length > 0)  {
+      window.location.href="/team{% if team %}/{{team.key().id()}}{% endif %}?round="+round;
+    }
+  });
+});
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "templates/layout.html" %}
+{% block content %}
+<h1>Admin Menu</h1>
+<p>Current state: {% if lockout %}Locked Out{% else %}Trades Open{% endif %} | 
+  <a href='/admin/toggle_lockout'>{% if lockout %}Open Trades{% else %}Lock{% endif %}</a></p>
+  
+<h2>Games</h2>
+{% for game in games %}
+<div class=game><a href="/admin/game/{{game.key().id()}}">Dedication vs. {{game.opposition}}</a>, {{game.date}}</div>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,196 @@
+body  {
+  font-family: 'Karla', Arial, sans-serif;
+}
+
+a {
+  color: #b07d57;
+}
+
+a:hover {
+  font-weight: bold;
+}
+
+#content h1  {
+  font-family: acme;
+  font-size: 2em;
+  margin-top:0px;
+  margin-bottom: 5px;
+}
+
+#content h1, h2, h3, h4 {
+  color: #530202;
+}
+  
+#content h2 {
+  font-weight: bold;
+  font-size: 1.5em;
+  margin-bottom: 0px;
+}
+
+#content h4 {
+  font-size: 1em;
+  font-weight:bold;
+  margin: 0px;
+}
+
+#header {
+  background-color: #a2080f;
+  margin: 0px 0px 0px 0px;
+  padding-left: 20px;
+  padding-top: 5px;
+  color: white;
+}
+
+#header h1  {
+  font-family: 'acme';
+}
+
+#navigation {
+  margin-left: 0px;
+  padding-left: 0px;
+  margin-bottom: 0px;
+}
+
+#navigation li  {
+  margin: 0px;
+}
+
+#header #account  {
+  float: right;
+  margin-right: 10px;
+  margin-top: 5px;
+  text-align: right;
+}
+
+#trade-table td {
+  vertical-align: top;
+}
+
+#trade-table .select  {
+  text-align: center;
+}
+
+#trade-table .category th {
+  font-size: 1.2em;
+}
+
+.player-list th {
+  font-size: 1em;
+  font-weight: normal;
+  font-style: italic;
+}
+
+.stats a  {
+  text-decoration: none;
+}
+
+.stats {
+  border-spacing: 0px;
+}
+
+.stats th {
+  text-align: left;
+  font-weight: bold;
+  border-bottom: 1px #161613 solid;
+}
+
+.stats tr td:last-child  {
+  text-align: right;
+}
+
+.stats tr td:last-child, .stats tr th:last-child {
+  padding-right: 5px;
+}
+
+.stats td {
+  border-bottom: 1px #b8b894 solid;
+}
+
+.stats td, .stats th  {
+  padding-left: 20px;
+}
+
+#logout  a{
+  color: white;
+}
+
+#content, #public_content  {
+  padding-left: 20px;
+  padding-right: 5px;
+  padding-bottom: 5px;
+  padding-top: 10px;
+  margin: 0px;
+  background-color: white;
+  height: 100%;
+  color: #161613;
+}
+
+.player-list  {
+  margin: 0px;
+  margin-bottom: 5px;
+}
+
+.player-list td {
+  padding-right: 0.5em;
+  padding-left: 0.5em;
+}
+
+#trade-table h3 {
+  margin-bottom: 0px;
+}
+
+body {
+  margin: 0px;
+}
+
+#menu {
+  float: right;
+  margin-right: 5px;
+}
+
+.progressbar  {
+  height: 1em;
+  margin-bottom: 10px;
+}
+
+.infobox, .progressbox {
+  position: fixed;
+  text-align: right;
+  width: 240px;
+}
+
+.infobox  {
+  right: 20px;
+  top: 140px;
+}
+
+.progressbox  {
+  right: 20px;
+  top: 70px;
+}
+
+.infobox p  {
+  margin: 0px;
+}
+
+.link:hover {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#left-pane  {
+  float: left;
+  width: 200px;
+}
+
+#right-pane {
+  float: left;
+  width: 500px;
+}
+
+#player-photo {
+  float: right;
+  padding: 5px;
+  background: #530202;
+  box-shadow: 5px 5px 5px #555555;
+}

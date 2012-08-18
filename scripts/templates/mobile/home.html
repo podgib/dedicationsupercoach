@@ -1,0 +1,40 @@
+{% extends 'templates/mobile/layout.html' %}
+{% block title %}Home{% endblock%}
+{% block content %}
+
+  <div class="ui-grid-a">
+      <div class="ui-block-a">
+      Total: {{user_meta.total_points}}
+      </div>
+      <div class="ui-block-b">
+      Last Round: {{round_score}}
+      </div>
+  </div>
+
+    <ul data-role="listview" data-divider-theme="a" data-inset="true">
+      <li data-role="list-divider" role="heading">
+        Main Menu
+      </li>
+      <li data-theme="a">
+        <a href="/team" data-transition="slide">
+          My Team
+        </a>
+      </li>
+      <li data-theme="a">
+        <a href="/team/ladder" data-transition="slide">
+          Ladder
+        </a>
+      </li>
+      <li data-theme="a">
+        <a href="/games" data-transition="slide">
+          Games
+        </a>
+      </li>
+      <li data-theme="a">
+        <a href="/players" data-transition="slide">
+          Players
+        </a>
+      </li>
+    </ul>
+  </div>
+{% endblock content %}

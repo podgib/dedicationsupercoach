@@ -1,0 +1,10 @@
+{% extends 'templates/mobile/layout.html' %}
+{% block title %}Player{% endblock %}
+{% block content %}
+<h1>{{player.first_name}} {{player.surname}}</h1>
+<p>Batting Price: ${{player.batting_price}}</p>
+<p>Bowling Price: ${{player.bowling_price}}</p>
+<p>Fielding Price: ${{player.fielding_price}}</p>
+<h2>Description</h2>
+<p>{{player.description}}</p>
+{% endblock %}

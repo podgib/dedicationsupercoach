@@ -1,0 +1,37 @@
+{% extends "templates/layout.html" %}
+{% block content %}
+{% include 'templates/team-menu.html' %}
+<div id="left-pane">
+  <h1>{{team_user.team_name}}</h1>
+  {% if team_user.key() != user_meta.key() %}
+  <h4>Coach: {{team_user.first_name}} {{team_user.surname}}</h4>
+  {% endif %}
+  {% if team.captain %}
+  <h4>Captain: {{team.captain.first_name}} {{team.captain.surname}}
+    ({% if team.captain_type=='bat' %}Batting{% elif team.captain_type=='bowl'%}Bowling{% elif team.captain_type=='field' %}Fielding{% endif %})</h4>
+  {% endif %}
+  <h2>Batsmen</h2>
+  {% for p in batsmen %}
+  <div class="player link"><a onClick="loadPlayer({{p.key().id()}})">{{p.first_name}} {{p.surname}}</a></div>
+  {% endfor %}
+  <h2>Bowlers</h2>
+  {% for p in bowlers %}
+  <div class="player link"><a onClick="loadPlayer({{p.key().id()}})">{{p.first_name}} {{p.surname}}</a></div>
+  {% endfor %}
+  <h2>Fielders</h2>
+  {% for p in fielders %}
+  <div class="player link"><a onClick="loadPlayer({{p.key().id()}})">{{p.first_name}} {{p.surname}}</a></div>
+  {% endfor %}
+</div>
+<div id="right-pane">
+</div>
+{% endblock %}
+
+{% block script %}
+  function loadPlayer(id) {
+    $.get("/players/"+id,{"noLayout": "true"},
+      function(data)  {
+        $("#right-pane").html(data);
+      });
+  }
+{% endblock %}

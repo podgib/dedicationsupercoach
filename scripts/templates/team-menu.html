@@ -1,0 +1,15 @@
+<div id=menu>
+{% if team_user.key() == user_meta.key() %}
+{% if lockout %}
+<p>Trade Lockout in place</p>
+{% else %}
+<a href="/team/edit">Make Trades</a>
+{% endif %}
+{% endif %}
+{% if current_round > 1 %}
+<h3>Scores</h3>
+{% for i in range(1,current_round) %}
+<a href="/team/{{team.key().id()}}?round={{i}}">Round {{i}}</a><br />
+{% endfor %}
+{% endif %}
+</div>

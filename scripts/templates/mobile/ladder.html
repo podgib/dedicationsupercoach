@@ -1,0 +1,14 @@
+{% extends 'templates/mobile/layout.html' %}
+{% block title %}Ladder{% endblock%}
+{% block content %}
+
+<ul data-role="listview" data-divider-theme="a" data-inset="true">
+  {% for team in teams %}
+  <li data-theme="a">
+    <a href="/team/{{team.key().id()}}">
+    {{loop.index}}. {{team.team_name}}<span class="ui-li-count">{{team.total_points}}</span>
+    </a>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}

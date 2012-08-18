@@ -1,0 +1,95 @@
+{% extends "templates/public.html" %}
+{% block header %}
+  {{super()}}
+  <script type="text/javascript">
+    var budget={{budget}};
+    var remaining={{budget}};
+    var batsmen;
+    var bowlers;
+    var fielders;
+  </script>
+{% endblock %}
+{% block content %}
+  <h1>Select your team</h1>
+  <div class="progressbox ui-widget">
+  <p id=budget>Budget Remaining: ${{budget}}</p>
+  <p id=bat-count>Batsmen selected: 0</p>
+  <div id=batting-progress class=progressbar></div>
+  <p id=bowl-count>Bowlers selected: 0</p>
+  <div id=bowling-progress class=progressbar></div>
+  <p id=field-count>Fielders selected: 0</p>
+  <div id=fielding-progress class=progressbar></div>
+  </div>
+  <p>Please select five batsmen, three bowlers and three fielders. Also select one player (in one category) as your captain.</p>
+  <form action="/team/select" method="POST">
+  <h2>Batting</h2>
+  <table class=player-list>
+  <tr><th></th><th>Name</th><th>Price</th><th>Captain</th></tr>
+  {% for player in players %}
+  <tr><td><input type="checkbox" name="batting" value={{player.key()}} price={{player.batting_price}}></input></td><td>{{player.first_name}} {{player.surname}}</td><td>${{player.batting_price}}</td><td><input type="radio" name="captain" value="bat:{{player.key()}}" disabled></input></td></tr>
+  {% endfor %}
+  </table>
+  <h2>Bowling</h2>
+  <table class=player-list>
+  {% for player in players %}
+  <tr><td><input type="checkbox" name="bowling" value={{player.key()}} price={{player.bowling_price}}></input></td><td>{{player.first_name}} {{player.surname}}</td><td>${{player.bowling_price}}</td><td><input type="radio" name="captain" value="bowl:{{player.key()}}" disabled></input></td></tr>
+  {% endfor %}
+  </table>
+  <h2>Fielding</h2>
+  <table class=player-list>
+  {% for player in players %}
+  <tr><td><input type="checkbox" name="fielding" value={{player.key()}} price={{player.fielding_price}}></input></td><td>{{player.first_name}} {{player.surname}}</td><td>${{player.fielding_price}}</td><td><input type="radio" name="captain" value="field:{{player.key()}}" disabled></input></td></tr>
+  {% endfor %}
+  </table>
+  <input type="submit" value="Done">
+  </form>
+  
+  <script type="text/javascript">
+    $(function()  {
+      $('input:submit').button({disabled: true});
+      $('input:checkbox').change(function()  {
+        remaining=budget;
+        batsmen=$('input:checked[name="batting"]').each(function() {remaining-=$(this).attr('price');});
+        bowlers=$('input:checked[name="bowling"]').each(function() {remaining-=$(this).attr('price');});
+        fielders=$('input:checked[name="fielding"]').each(function() {remaining-=$(this).attr('price');});
+        
+        $('#budget').html("Budget Remaining: $" + remaining);
+        $('#bat-count').html("Batsmen selected: " + batsmen.length);
+        $('#bowl-count').html("Bowlers selected: " + bowlers.length);
+        $('#field-count').html("Fielders selected: "+ fielders.length);
+        
+        var name=$(this).attr("name");
+        if(name=="batting") {$("#batting-progress").progressbar("option","value",batsmen.length/.05);}
+        else if(name=="bowling") {$("#bowling-progress").progressbar("option","value",bowlers.length*100/3);}
+        else if(name=="fielding") {$("#fielding-progress").progressbar("option","value",fielders.length*100/3);}
+        
+        var key=$(this).attr("value");
+        var capt_radio=null;
+        if(name=="batting") {capt_radio=$('input:radio[value="bat:'+key+'"]')}
+        else if(name=="bowling") {capt_radio=$('input:radio[value="bowl:'+key+'"]')}
+        else if(name=="fielding") {capt_radio=$('input:radio[value="field:'+key+'"]')}
+        if($(this).is(':checked'))  {
+          capt_radio.removeAttr('disabled');
+        }
+        else  {
+          capt_radio.removeAttr('checked');
+          capt_radio.attr('disabled','disabled');
+        }
+        
+        capt_valid=$('input:checked[name="captain"]').length == 1;
+        
+        if(capt_valid && batsmen.length == 5 && bowlers.length == 3 && fielders.length == 3 && remaining >= 0)  {
+          $('input:submit').button({disabled: false});
+        }
+        else  { $('input:submit').button({disabled: true}); }
+      });
+      $('input:radio').change(function()  {
+        if($('input:checked[name="captain"]').length == 1 && batsmen.length == 5 && bowlers.length == 3 && fielders.length == 3 && remaining >= 0)  {
+          $('input:submit').button({disabled: false});
+        }
+      });
+      $(".progressbar").progressbar({value: 0});  
+      $("#content").css("margin-right","250px");
+    });   
+  </script>
+{% endblock %}

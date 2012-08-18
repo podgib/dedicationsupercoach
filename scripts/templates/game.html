@@ -1,0 +1,50 @@
+{% extends "templates/layout.html" %}
+{% block content %}
+{% if team %}
+<h1>{{team.user.team_name}}</h1>
+{% if team.user.key() != user_meta.key() %}
+  <h4>Coach: {{team.user.first_name}} {{team.user.surname}}</h4>
+{% endif %}
+<h2>Round {{game.round}}</h2>
+<h4>Score: {{team.total_score}}</h4>
+{% else %}
+<h1>Round {{game.round}}</h1>
+<h2>Dedication {% if game.played %} {% if game.result=='win' %} def. {% elif game.result=='tie' %} tied with {% elif game.result=='loss' %} def. by {% else %} vs. {% endif %} {% else %} vs. {% endif %} {{game.opposition}}</h2>
+<p>{{game.date}}, {{game.overs}} overs</p>
+{% endif %}
+
+<h3>Batting{% if team %}: {{team.batting_score}}{% endif %}</h3>
+<table class=stats>
+<tr><th>Player</th><th>Runs</th><th>Balls</th><th>Strike Rate</th><th>Fours</th><th>Sixes</th><th>How Out</th><th>Points</th></tr>
+{% for p in batsmen %}
+{% if p.batted %}
+<tr><td>{{p.player.first_name}} {{p.player.surname}}</td>
+  <td>{{p.runs}}{% if p.not_out %}*{% endif %}</td><td>{{p.balls_faced}}</td><td>{% if p.balls_faced > 0 %}{{"%.2f"|format(p.runs/p.balls_faced*100)}}{% endif %}<td>{{p.fours_hit}}</td><td>{{p.sixes_hit}}</td><td>{% if not p.not_out %}{{p.how_out}}{% endif %}</td><td>{{p.batting_points}}</td></tr>
+{% else %}
+<tr><td>{{p.player.first_name}} {{p.player.surname}}</td><td colspan=3>DNB</td></tr>
+{% endif %}
+{% endfor %}
+</table>
+
+<h3>Bowling{% if team %}: {{team.bowling_score}}{% endif %}</h3>
+<table class=stats>
+<tr><th>Player</th><th>Overs</th><th>Maidens</th><th>Runs</th><th>Wickets</th><th>Average</th><th>Strike Rate</th><th>Economy Rate</th><th>Wides</th><th>No Balls</th><th>Fours</th><th>Sixes</th><th>Points</th></tr>
+{% for p in bowlers %}
+<tr><td>{{p.player.first_name}} {{p.player.surname}}</td>{% if p.bowled %}
+  <td>{{p.overs}}.{{p.balls}}</td><td>{{p.maidens}}</td><td>{{p.runs_conceded}}</td><td>{{p.wickets}}</td><td>{% if p.wickets > 0 %}{{"%.2f"|format(p.runs_conceded/p.wickets)}}{% else %}-{% endif %}</td><td>{% if p.wickets > 0 %}{{"%.2f"|format((6*p.overs+p.balls)/p.wickets)}}{% else %}-{% endif %}</td><td>{% if p.overs+p.balls > 0 %}{{"%.2f"|format(p.runs_conceded/(6*p.overs+p.balls))}}{% else %}-{% endif %}</td><td>{{p.wides}}</td><td>{{p.no_balls}}</td><td>{{p.fours}}</td><td>{{p.sixes}}</td><td>{{p.bowling_points}}</td>
+  {% else %}<td colspan=3>DNB</td>{% endif %}
+</tr>
+{% endfor %}
+</table>
+
+<h3>Fielding{% if team %}: {{team.fielding_score}}{% endif %}</h3>
+<table class=stats>
+<tr><th>Player</th><th>Catches</th><th>Run Outs</th><th>Misfields</th><th>Dropped Catches<br />(Diving)</th><th>Non-attempts</th><th>Other Mistakes</th><th>Points</th></tr>
+{% for p in fielders %}
+<tr><td>{{p.player.first_name}} {{p.player.surname}}</td>
+  <td>{{p.catches}}</td><td>{{p.run_outs}}</td><td>{{p.misfields}}</td><td>{{p.drops+p.diving_drops}} ({{p.diving_drops}})</td><td>{{p.non_attempts}}</td><td>{{p.other}}</td><td>{{p.fielding_points}}</td>
+</tr>
+{% endfor %}
+</table>
+
+{% endblock %}

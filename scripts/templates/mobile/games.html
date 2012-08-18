@@ -1,0 +1,36 @@
+{% extends 'templates/mobile/layout.html' %}
+{% block title %}Players{% endblock %}
+{% block content %}
+
+<ul data-role="listview" data-inset="true" data-divider-theme="c">
+{% if next_game %}
+<li data-role="header">
+{% if lockout %}In Progress: {% else %}Next game: {% endif %}
+</li>
+<li data-theme="a">
+  <a href="/games/{{next_game.key().id()}}">Dedication vs. {{next_game.opposition}}</a>
+</li>
+{% endif %}
+{% for game in past_games %}
+{% if loop.first %}
+  <li data-role="header">
+    Completed Games
+  </li>
+{% endif %}
+  <li data-theme="a">
+    <a href="/games/{{game.key().id()}}">Dedication vs {{game.opposition}}</a>
+  </li>
+{% endfor %}
+{% for game in future_games %}
+{% if loop.first %}
+  <li data-role="header">
+    Future Games
+  </li>
+{% endif %}
+  <li data-theme="a">
+    <a href="/games/{{game.key().id()}}">Dedication vs {{game.opposition}}</a>
+  </li>
+{% endfor %}
+</ul>
+
+{% endblock %}

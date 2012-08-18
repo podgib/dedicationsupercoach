@@ -1,0 +1,10 @@
+{% extends "templates/layout.html" %}
+{% block content %}
+<h1>Ladder</h1>
+<table class=stats>
+<tr><th></th><th>Team</th><th>Coach</th><th>Points</th></tr>
+{% for team in teams %}
+<tr><td>{{loop.index}}<td><a href="/team/{{team.key().id()}}">{{team.team_name}}</a></td><td>{{team.first_name}}</td><td>{{team.total_points}}</td></tr>
+{% endfor %}
+</table>
+{% endblock %}

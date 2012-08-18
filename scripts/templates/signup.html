@@ -1,0 +1,27 @@
+{% extends "templates/public.html" %}
+{% block content %}
+  <h1>Sign Up for Dedication Super Coach!</h1>
+  <form method="POST" action="/signup"> 
+  {% if fb_id %}
+  <input type="hidden" name="fb_id" value="{{fb_id}}"></input>
+  <input type="hidden" name="access_token" value="{{access_token}}"></input>
+  {% endif %}
+  <table id=signup>
+    <tr><td><label for=first_name>First Name</label></td><td><input name="first_name" value="{{first_name}}"></input></td></tr>
+    <tr><td><label for=surname>Surname</label></td><td><input name="surname" value="{{surname}}"></input></td></tr>
+    <tr><td><label for=team_name>Team Name</label></td><td><input name="team_name"></input></td></tr>
+  </table>
+  <input type="submit" value="Sign me up!"></input>
+  </form>
+  <script type="text/javascript">
+    $(function()  {
+      $('input:submit').button({disabled: true});
+      $('input').keypress(function()  {
+        if ($('input[name="first_name"]').val() != '' && $('input[name="surname"]').val() != '' && $('input[name="team_name"]').val() != '')
+          $('input:submit').button({disabled: false});
+        else
+          $('input:submit').button({disabled: true});
+      });
+    });
+  </script>
+{% endblock %}

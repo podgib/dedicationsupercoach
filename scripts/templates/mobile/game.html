@@ -1,0 +1,43 @@
+{% extends 'templates/mobile/layout.html' %}
+{% block title %}Round {{game.round}}{% endblock%}
+{% block content %}
+
+{% if team %}
+<h2>{{team.user.team_name}}</h2>
+{% if team.user.key() != user_meta.key() %}
+  <h4>Coach: {{team.user.first_name}} {{team.user.surname}}</h4>
+{% endif %}
+<h4>Score: {{team.total_score}}</h4>
+{% endif %}
+
+<div data-role="collapsible-set" data-mini="true" data-theme="a">
+  <div data-role="collapsible" data-collapsed="false"  data-theme="a">
+    <h3>Batsmen</h3>
+    <ul data-role="listview" data-inset="true" data-theme="c">
+      {% for p in batsmen %}
+      <li data-theme="c"><a href="/players/{{p.player.key().id()}}">{{p.player.first_name}} {{p.player.surname}}</a>
+        <span class="ui-li-count">{{p.batting_points}}</span></li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div data-role="collapsible"  data-theme="a">
+    <h3>Bowlers</h3>
+    <ul data-role="listview" data-inset="true" data-theme="b">
+      {% for p in bowlers %}
+      <li data-theme="c"><a href="/players/{{p.player.key().id()}}">{{p.player.first_name}} {{p.player.surname}}</a>
+        <span class="ui-li-count">{{p.bowling_points}}</span></li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div data-role="collapsible"  data-theme="a">
+    <h3>Fielders</h3>
+    <ul data-role="listview" data-inset="true" data-theme="b">
+      {% for p in fielders %}
+      <li data-theme="c"><a href="/players/{{p.player.key().id()}}">{{p.player.first_name}} {{p.player.surname}}</a></
+        <span class="ui-li-count">{{p.fielding_points}}</span></li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+{% endblock %}

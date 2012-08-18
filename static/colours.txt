@@ -1,0 +1,9 @@
+dark grey:#161613    
+grey:#6a6a6a    
+red:#a2080f    
+light grey:#b8b894    
+dark brown:#530202    
+light brown:#b07d57    
+light: #fff4e0  
+light pink: #ffe5d4  
+pink:#d63345     

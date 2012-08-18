@@ -1,0 +1,45 @@
+{% extends "templates/public.html" %}
+{% block body %}
+<div id="fb-root"></div>
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '{{FACEBOOK_APP_ID}}', // App ID
+      channelUrl : 'http://dedicationsupercoach.appspot.com/static/channel.html', // Channel File
+      status     : true, // check login status
+      cookie     : true, // enable cookies to allow the server to access the session
+      xfbml      : true  // parse XFBML
+    });
+  };
+
+  // Load the SDK Asynchronously
+  (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_GB/all.js";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+
+  function fblogin()  {
+    FB.login(function(response) {
+      if (response.authResponse)  {
+        window.location.href="/login?fbtoken="+response.authResponse.accessToken;
+      }
+    });
+  }
+</script>
+{% endblock %}
+
+{% block content %}
+<h1>Hutt River Dedication Supercoach</h1>
+<p><a class=button href="#" onClick="fblogin()">Login with Facebook</a></p>
+{% if dev_server %}<p>or <a href="{{login}}">Login with Google</a></p>{% endif %}
+
+
+<script type="text/javascript">
+  $(function()  {
+    $(".button").button();
+  });
+</script>
+{% endblock %}

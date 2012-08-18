@@ -1,0 +1,20 @@
+{% extends "templates/layout.html" %}
+{% block content %}
+<div id="left-pane">
+<h1>Players</h1>
+{% for player in players %}
+<div class="player link"><a onClick="loadPlayer({{player.key().id()}})">{{player.first_name}} {{player.surname}}</a></div>
+{% endfor %}
+</div>
+<div id="right-pane">
+</div>
+{% endblock %}
+
+{% block script %}
+  function loadPlayer(id) {
+    $.get("/players/"+id,{"noLayout": "true"},
+      function(data)  {
+        $("#right-pane").html(data);
+      });
+  }
+{% endblock %}

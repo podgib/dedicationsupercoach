@@ -1,0 +1,13 @@
+{% if not no_layout %}
+{% extends "templates/layout.html" %}
+{% endif %}
+
+{% block content %}
+<h1>{{player.first_name}} {{player.surname}}</h1>
+<div class="ui-corner-all" id="player-photo"><img class="ui-corner-all" src="/static/images/players/{{player.first_name|lower}}-{{player.surname|lower}}.jpg" /></div>
+<p>Batting Price: ${{player.batting_price}}</p>
+<p>Bowling Price: ${{player.bowling_price}}</p>
+<p>Fielding Price: ${{player.fielding_price}}</p>
+<h2>Description</h2>
+<p>{{player.description}}</p>
+{% endblock content %}

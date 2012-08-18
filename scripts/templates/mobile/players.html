@@ -1,0 +1,15 @@
+{% extends 'templates/mobile/layout.html' %}
+{% block title %}Players{% endblock %}
+{% block content %}
+
+<ul data-role="listview" data-inset="true">
+{% for player in players %}
+  <li data-theme="a">
+    <a href="/players/{{player.key().id()}}">
+    {{player.first_name}} {{player.surname}}
+    </a>
+  </li>
+{% endfor %}
+</ul>
+
+{% endblock %}

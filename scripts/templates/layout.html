@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Hutt River Dedication Supercoach</title>
+
+<link href='//fonts.googleapis.com/css?family=Karla:400,400italic,700' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Acme' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="/static/jquery-ui.css" type="text/css" />
+<link rel="stylesheet" href="/static/style.css" type="text/css" />
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.21/jquery-ui.min.js" type="text/javascript"></script>
+
+{% block header %}
+{% endblock %}
+</head>
+<body>
+<div id=header>
+  <div id=account><span id=username>{{user_meta.first_name}} {{user_meta.surname}}</span><br />
+        <span id=logout><a href="/logout">Logout</a></span>
+  </div>
+  <h1>Hutt River Dedication Supercoach</h1>
+  <ul id=navigation>
+    <li {% if page=="home" %}class=ui-state-active{% endif %}><span class=ui-button-text><a href="/">Home</a></span></li>
+    <li {% if page=="team" %}class=ui-state-active{% endif %}><span class=ui-button-text><a href="/team">My Team</a></span></li>
+    <li {% if page=="players" %}class=ui-state-active{% endif %}><span class=ui-button-text><a href="/players">Players</a></span></li>
+    <li {% if page=="games" %}class=ui-state-active{% endif %}><span class=ui-button-text><a href="/games">Games</a></span></li>
+    <li {% if page=="ladder" %}class=ui-state-active{% endif %}><span class=ui-button-text><a href="/team/ladder">Ladder</a></span></li>
+    {% if user_meta.admin %}<li {% if page=="admin" %}class=ui-state-active{% endif %}><span class=ui-button-text><a href='/admin'>Admin Menu</a></span></li>{% endif %}
+  </ul>
+</div>
+
+<div id=content>
+  {% if errormsg %}
+  <div class='ui-state-error ui-corner-all'><p><span class="ui-icon ui-icon-alert" style="float: left; margin-right: 0.3em"></span>{{errormsg}}</p></div>
+  {% endif %}
+  {% block content %}
+  {% endblock %}
+<div style="clear: both"></div>
+</div>
+
+<script type="text/javascript">
+  $(function()  {
+    $("#navigation li").addClass("ui-button ui-widget ui-state-default ui-corner-top ui-button-text-only");
+  });
+  {% block script %}
+  {% endblock %}
+</script>
+</body>
+</html>

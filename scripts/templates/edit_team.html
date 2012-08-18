@@ -1,0 +1,138 @@
+{% extends "templates/layout.html" %}
+{% block header %}
+<script type="text/javascript">
+  var budget={{budget}};
+  var totalTrades={{total_trades}};
+  var roundTrades={{round_trades}};
+  var tradesMade=0;
+  var d_bat=0;
+  var d_bowl=0;
+  var d_field=0;
+  var p_bat=0;
+  var p_bowl=0;
+  var p_field=0;
+</script>
+{% endblock %}
+{% block content %}
+<h1>Edit Team</h1>
+<div class="ui-widget infobox">
+<p id=budget>Budget Remaining: ${{budget}}</p>
+<p id=round_trades>Trades available: {{round_trades}}</p>
+<p id=total_trades>Total trades left: {{total_trades}}</p>
+</div>
+
+{% if lockout %}
+<p>Lockout in place. Cannot edit team</p>
+{% else %}
+<form action='/team/edit' method='POST'>
+<table id=trade-table>
+<tr><th><h3>Current Team</h3></th><th><h3>Available Players</h3></th></tr>
+<tr class="category"><th colspan=2>Batsmen</th></tr>
+<tr><td>
+<table class="current player-list">
+<tr><th>Drop</th><th>Captain</th></tr>
+{% for player in selected_batsmen %}
+<tr><td class="select"><input type="checkbox" name="dropped_batsmen" value={{player.key().id()}} price=-{{player.batting_price}}></input></td><td class="select"><input type="radio" name="captain" value="bat:{{player.key().id()}}" {% if captain_type=='bat' and captain.key()==player.key() %}checked{% endif %}></input></td><td>{{player.first_name}} {{player.surname}}</td><td>${{player.batting_price}}</td></tr>
+{% endfor %}
+</table>
+</td>
+<td>
+<table class="available player-list">
+<tr><th>Pick</th></tr>
+{% for player in available_batsmen %}
+<tr><td><input type="checkbox" name="picked_batsmen" value={{player.key().id()}} price={{player.batting_price}}></input></td><td>{{player.first_name}} {{player.surname}}</td><td>${{player.batting_price}}</td></tr>
+{% endfor %}
+</table>
+</td>
+</tr>
+<tr class="category"><th colspan=2>Bowlers</th></tr>
+<tr><td>
+<table class="current player-list">
+<tr><th>Drop</th><th>Captain</th></tr>
+{% for player in selected_bowlers %}
+<tr><td><input type="checkbox" name="dropped_bowlers" value={{player.key().id()}} price=-{{player.bowling_price}}></input></td><td class="select"><input type="radio" name="captain" value="bowl:{{player.key().id()}}" {% if captain_type=='bowl' and captain.key()==player.key() %}checked{% endif %}></input><td>{{player.first_name}} {{player.surname}}</td><td>${{player.bowling_price}}</td></tr>
+{% endfor %}
+</table>
+</td>
+<td>
+<table class="available player-list">
+<tr><th>Pick</th></tr>
+{% for player in available_bowlers %}
+<tr><td><input type="checkbox" name="picked_bowlers" value={{player.key().id()}} price={{player.bowling_price}}></input></td><td>{{player.first_name}} {{player.surname}}</td><td>${{player.bowling_price}}</td></tr>
+{% endfor %}
+</table>
+</td>
+</tr>
+<tr class="category"><th colspan=2>Fielders</th></tr>
+<tr><td>
+<table class="current player-list">
+<tr><th>Drop</th><th>Captain</th></tr>
+{% for player in selected_fielders %}
+<tr><td><input type="checkbox" name="dropped_fielders" value={{player.key().id()}} price=-{{player.fielding_price}}></input></td><td class="select"><input type="radio" name="captain" value="field:{{player.key().id()}}" {% if captain_type=='field' and captain.key()==player.key() %}checked{% endif %}></input><td>{{player.first_name}} {{player.surname}}</td><td>${{player.fielding_price}}</td></tr>
+{% endfor %}
+</table>
+</td>
+<td>
+<table class="available player-list">
+<tr><th>Pick</th></tr>
+{% for player in available_fielders %}
+<tr><td><input type="checkbox" name="picked_fielders" value={{player.key().id()}} price={{player.fielding_price}}></input></td><td>{{player.first_name}} {{player.surname}}</td><td>${{player.fielding_price}}</td></tr>
+{% endfor %}
+</table>
+</td>
+</tr>
+</table>
+<input type=submit value="Submit Changes"></input>
+</form>
+{% endif %}
+{% endblock %}
+{% block script %}
+  {{super()}}
+  $(function()  {
+    $('input:submit').button({disabled: true});
+    $('input:radio').change(function()  {
+      if(budget >= 0 && d_bat == p_bat && d_bowl == p_bowl && d_field == p_field && p_bat+p_bowl+p_field <= roundTrades) {
+        $('input:submit').button({disabled: false});
+      }
+    });
+    $('input:checkbox').change(function() {
+      if($(this).attr('checked')) {
+        budget-=parseInt($(this).attr('price'));
+      }
+      else  {
+        budget+=parseInt($(this).attr('price'));
+      }
+      $('#budget').html("Budget Remaining: $"+budget);
+      
+      var name=$(this).attr("name");
+      var id=$(this).attr("value");
+      capt_radio=null;
+      if(name=="dropped_batsmen") {capt_radio=$('input:radio[value="bat:'+id+'"]')}
+      else if(name=="dropped_bowlers") {capt_radio=$('input:radio[value="bowl:'+id+'"]')}
+      else if(name=="dropped_fielders") {capt_radio=$('input:radio[value="field:'+id+'"]')}
+      if(capt_radio)  {
+        if($(this).is(':checked'))  {
+          capt_radio.removeAttr('checked');
+          capt_radio.attr('disabled','disabled');
+        }
+        else  {
+          capt_radio.removeAttr('disabled');
+        }
+      }
+      
+      d_bat=$('input:checked[name="dropped_batsmen"]').length;
+      d_bowl=$('input:checked[name="dropped_bowlers"]').length;
+      d_field=$('input:checked[name="dropped_fielders"]').length;
+      p_bat=$('input:checked[name="picked_batsmen"]').length;
+      p_bowl=$('input:checked[name="picked_bowlers"]').length;
+      p_field=$('input:checked[name="picked_fielders"]').length;
+      
+      if(budget >= 0 && d_bat == p_bat && d_bowl == p_bowl && d_field == p_field && p_bat+p_bowl+p_field <= roundTrades) {
+        $('input:submit').button({disabled: false});
+      }
+      else  {
+        $('input:submit').button({disabled: true});
+      }
+    });
+  });
+{% endblock %}
