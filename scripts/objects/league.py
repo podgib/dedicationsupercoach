@@ -7,6 +7,7 @@ import random
 class Match(db.Model):
   round=db.IntegerProperty(required=True)
   pool=db.ReferenceProperty(Pool)
+  league=db.ReferenceProperty(League)
   teamA=db.ReferenceProperty(UserMeta,collection_name="teamA_set")
   teamB=db.ReferenceProperty(UserMeta,collection_name="teamB_set")
   winner=db.IntegerProperty(default=0)
@@ -14,6 +15,7 @@ class Match(db.Model):
   
 class Pool(db.Model):
   teams=db.ListProperty(db.Key,default=[])
+  league=db.ReferenceProperty(League)
   
   def roundRobin(self):
     Match(pool=self,round=1,teamA=teams[0],teamB=teams[1]).put()
@@ -23,20 +25,17 @@ class Pool(db.Model):
     Match(pool=self,round=3,teamA=teams[0],teamB=teams[3]).put()
     Match(pool=self,round=3,teamA=teams[1],teamB=teams[2]).put()
   
-class LeagueTeam(db.Model):
-  user=db.ReferenceProperty(UserMeta)
-  league=db.ReferenceProperty(League)
-  wins=db.IntegerProperty(default=0)
-  losses=db.IntegerProperty(default=0)
-  draws=db.IntegerProperty(default=0)
-  percentage=db.FloatProperty(default=0.0)
-  pool=db.ReferenceProperty(Pool)
-  
 class League(db.Model):
-  matches=db.ListProperty(db.Key,default=[])
-  pools=db.ListProperty(db.Key,default=[])
+  def createLeague(self,teams):
+    for team in teams:
+      team.league=self
+      team.wins=0
+      team.losses=0
+      team.ties=0
+      team.percentage=0
+    createFixture(self,teams)
     
-  def createFixture(self,teams=None):
+  def createFixture(self,teams):
     """
     Fixtures: 4 pools of 4, round robin (3 rounds) then semis
     
@@ -50,20 +49,13 @@ class League(db.Model):
       p.roundRobin()
     
     
-  def createPools(self,teams=None):
-    if teams==None:
-      teams=list(self.usermeta_set)
+  def createPools(self,teams):
     if len(self.teams) < 4:
       return
     numPerPool=int(math.ceil(float(len(self.teams))/4))
     random.shuffle(teams)
-    poolA=Pool(teams=teams[0:numPerPool]).put()
-    poolB=Pool(teams=teams[numPerPool:2*numPerPool]).put()
-    poolC=Pool(teams=teams[2*numPerPool:3*numPerPool]).put()
-    poolD=Pool(teams=teams[3*numPerPool:4*numPerPool]).put()
-    for p in [poolA,poolB,poolC,poolD]:
-      self.pools.append(p.key())
+    poolA=Pool(league=self,teams=teams[0:numPerPool]).put()
+    poolB=Pool(league=self,teams=teams[numPerPool:2*numPerPool]).put()
+    poolC=Pool(league=self,teams=teams[2*numPerPool:3*numPerPool]).put()
+    poolD=Pool(league=self,teams=teams[3*numPerPool:4*numPerPool]).put()
     return [poolA,poolB,poolC,poolD]
-    
-  def createMatches(self):
-  if matches and len(matches) > 

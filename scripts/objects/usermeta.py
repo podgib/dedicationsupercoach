@@ -1,7 +1,6 @@
 from google.appengine.ext import db
-from league import League
 
-class UserMeta(db.Model):
+class UserMeta(db.Expando):
   """Holds information about a user"""
   user_id = db.StringProperty()
   fb_id = db.StringProperty()
@@ -13,8 +12,6 @@ class UserMeta(db.Model):
   admin = db.BooleanProperty(default=False)
   
   team_name = db.StringProperty()
-  
-  league=db.ReferenceProperty(League)
   
   budget=db.IntegerProperty(default=200000)
   total_trades=db.IntegerProperty(default=10)
