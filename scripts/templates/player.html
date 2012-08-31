@@ -5,9 +5,24 @@
 {% block content %}
 <h1>{{player.first_name}} {{player.surname}}</h1>
 <div class="ui-corner-all" id="player-photo"><img class="ui-corner-all" src="/static/images/players/{{player.first_name|lower}}-{{player.surname|lower}}.jpg" /></div>
-<p>Batting Price: ${{player.batting_price}}</p>
-<p>Bowling Price: ${{player.bowling_price}}</p>
-<p>Fielding Price: ${{player.fielding_price}}</p>
+{% set batting_diff=player.batting_price-player.initial_batting_price %}
+<p>Batting Price: ${{player.batting_price}}
+{% if batting_diff > 0 %}(+${{batting_diff}})
+{% elif batting_diff < 0 %}(-${{0-batting_diff}})
+{% else%}(+$0){% endif %}
+</p>
+{% set bowling_diff=player.bowling_price-player.initial_bowling_price %}
+<p>Bowling Price: ${{player.bowling_price}}
+{% if bowling_diff > 0 %}(+${{bowling_diff}})
+{% elif bowling_diff < 0 %}(-${{0-bowling_diff}})
+{% else%}(+$0){% endif %}
+</p>
+{% set fielding_diff=player.fielding_price-player.initial_fielding_price %}
+<p>Fielding Price: ${{player.fielding_price}}
+{% if fielding_diff > 0 %}(+${{fielding_diff}})
+{% elif fielding_diff < 0 %}(-${{0-fielding_diff}})
+{% else%}(+$0){% endif %}
+</p>
 <h2>Description</h2>
 <p>{{player.description}}</p>
 {% endblock content %}
