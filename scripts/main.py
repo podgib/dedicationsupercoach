@@ -41,7 +41,7 @@ class LoginHandler(webapp2.RequestHandler):
       if not self.request.get('app'):
         self.redirect("/")
       else:
-        self.response.out.write(id+":"+rand_string);
+        self.response.out.write(json.dumps({"auth":id+":"+rand_string}))
       return
     else:
       if self.request.get('app'):
@@ -131,14 +131,5 @@ class LandingHandler(webapp2.RequestHandler):
       else:
         template=jinja_environment.get_template('templates/home.html')
       self.response.out.write(template.render(template_values))
-      
-class AndroidHandler(webapp2.RequestHandler):
-  def get(self):
-    user_meta=get_meta()
-    if not user_meta:
-      self.response.out.write('not logged in')
-    else:
-      self.response.out.write("Hi " + user_meta.first_name)
 
-
-app = webapp2.WSGIApplication([('/signup',SignupHandler),('/', LandingHandler),('/login',LoginHandler),('/logout',LogoutHandler),('/android',AndroidHandler)],debug=True)
+app = webapp2.WSGIApplication([('/signup',SignupHandler),('/', LandingHandler),('/login',LoginHandler),('/logout',LogoutHandler)],debug=True)

@@ -30,6 +30,12 @@ handlers:
   static_dir: scripts.worker.app
   login: admin
   
+- url: /api.*
+  script: scripts.api.app
+  
+- url: /android.*
+  script: scripts.api.app
+  
 - url: /.*
   script: scripts.main.app
 
