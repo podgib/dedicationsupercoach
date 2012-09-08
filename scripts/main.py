@@ -38,9 +38,15 @@ class LoginHandler(webapp2.RequestHandler):
       self.response.set_cookie("fb_user",id+":"+rand_string,expires=datetime.datetime.now()+datetime.timedelta(days=30));
       user.access_token=access_token
       save_user(user)
-      self.redirect("/")
+      if not self.request.get('app'):
+        self.redirect("/")
+      else:
+        self.response.out.write(id+":"+rand_string);
       return
     else:
+      if self.request.get('app'):
+        self.response.out.write("Error")
+        return
       template_values={'first_name':profile["first_name"],'surname':profile["last_name"],'fb_id':id,'access_token':access_token}
       template=jinja_environment.get_template('templates/signup.html')
       self.response.out.write(template.render(template_values))
@@ -125,6 +131,14 @@ class LandingHandler(webapp2.RequestHandler):
       else:
         template=jinja_environment.get_template('templates/home.html')
       self.response.out.write(template.render(template_values))
+      
+class AndroidHandler(webapp2.RequestHandler):
+  def get(self):
+    user_meta=get_meta()
+    if not user_meta:
+      self.response.out.write('not logged in')
+    else:
+      self.response.out.write("Hi " + user_meta.first_name)
 
 
-app = webapp2.WSGIApplication([('/signup',SignupHandler),('/', LandingHandler),('/login',LoginHandler),('/logout',LogoutHandler)],debug=True)
+app = webapp2.WSGIApplication([('/signup',SignupHandler),('/', LandingHandler),('/login',LoginHandler),('/logout',LogoutHandler),('/android',AndroidHandler)],debug=True)

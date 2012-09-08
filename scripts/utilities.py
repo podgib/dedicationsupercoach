@@ -67,6 +67,8 @@ def get_meta(user=None):
     
 def fb_get_meta():
   fb=webapp2.get_request().cookies.get("fb_user")
+  if not fb:
+    fb=webapp2.get_request().get("auth")
   if fb:
     fb=fb.split(":",1)
     meta=memcache.get("fb"+fb[0])
