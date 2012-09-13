@@ -13,6 +13,18 @@ jinja_environment.globals['page']='league'
 
 class LeagueHandler(webapp2.RequestHandler):
   def get(self):
+    user_meta=get_meta()
+    if not user_meta.league:
+      self.redirect('/')
+      return
+    league = League.all().get()
+    pools=league.pool_set
+    
+    template_values={'pools':pools,'user_meta':user_meta}
+    template=jinja_environment.get_template('templates/league.html')
+    self.response.out.write(template.render(template_values))
+    
+  def createLeague(self):
     l=League()
     teams=UserMeta.all().fetch(16)
     l.put()

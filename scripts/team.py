@@ -24,7 +24,7 @@ class SelectHandler(webapp2.RequestHandler):
     if team:
       self.redirect("/team/edit")
     players=Player.all().filter("active =",True).fetch(100)
-    template_values={'user_meta':get_meta(),'players':players,'budget':user.budget}
+    template_values={'user_meta':user,'players':players,'budget':user.budget}
     template=jinja_environment.get_template('templates/select_team.html')
     self.response.out.write(template.render(template_values))
     
