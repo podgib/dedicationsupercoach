@@ -29,5 +29,19 @@ class LeagueHandler(webapp2.RequestHandler):
     teams=UserMeta.all().fetch(16)
     l.put()
     l.createLeague(teams)
+    
+class DrawHandler(webapp2.RequestHandler):
+  def get(self,category="pool"):
+    user_meta=get_meta()
+    team=LeagueTeam.all().filter('user =',user_meta).get()
+    matches=[]
+    if category == "pool":
+      matches=Match.all().filter('pool =',team.pool).fetch(15)
+    elif category == "all":
+      matches=Match.all().fetch(15)
+    template_values={'category':category,'user_meta':user_meta,'team':team,'matches':matches}
+    template=jinja_environment.get_template('templates/draw.html')
+    self.response.out.write(template.render(template_values))
+    
 
-app = webapp2.WSGIApplication([('/league',LeagueHandler)],debug=True)
+app = webapp2.WSGIApplication([('/league',LeagueHandler),('/league/draw',DrawHandler),webapp2.Route('/league/draw/<category>',handler=DrawHandler)],debug=True)

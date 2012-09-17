@@ -85,5 +85,7 @@ class Match(db.Model):
   league=db.ReferenceProperty(League)
   teamA=db.ReferenceProperty(LeagueTeam,collection_name="teamA_set")
   teamB=db.ReferenceProperty(LeagueTeam,collection_name="teamB_set")
+  teamAScore=db.IntegerProperty(default=0)
+  teamBScore=db.IntegerProperty(default=0)
   winner=db.IntegerProperty(default=0)
   played=db.BooleanProperty(default=False)

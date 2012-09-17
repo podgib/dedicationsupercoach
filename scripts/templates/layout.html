@@ -26,7 +26,7 @@
     <li {% if page=="players" %}class=ui-state-active{% endif %}><span class=ui-button-text><a href="/players">Players</a></span></li>
     <li {% if page=="games" %}class=ui-state-active{% endif %}><span class=ui-button-text><a href="/games">Games</a></span></li>
     <li {% if page=="ladder" %}class=ui-state-active{% endif %}><span class=ui-button-text><a href="/team/ladder">Ladder</a></span></li>
-    {% if user_meta.league %}<li{% if page=="league" %}class=ui-state-active{% endif %}><span class=ui-button-text><a href="/league">League</a></span></li>{% endif %}
+    {% if user_meta.league %}<li {% if page=="league" %}class=ui-state-active{% endif %}><span class=ui-button-text><a href="/league">League</a></span></li>{% endif %}
     {% if user_meta.admin %}<li {% if page=="admin" %}class=ui-state-active{% endif %}><span class=ui-button-text><a href='/admin'>Admin Menu</a></span></li>{% endif %}
   </ul>
 </div>

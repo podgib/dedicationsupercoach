@@ -148,6 +148,10 @@ body {
   margin-right: 5px;
 }
 
+#menu ul  {
+  list-style-type: none;
+}
+
 .progressbar  {
   height: 1em;
   margin-bottom: 10px;
