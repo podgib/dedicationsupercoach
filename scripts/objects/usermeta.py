@@ -12,6 +12,7 @@ class UserMeta(db.Model):
   admin = db.BooleanProperty(default=False)
   
   team_name = db.StringProperty()
+  league = db.BooleanProperty(default=False)
   
   budget=db.IntegerProperty(default=200000)
   total_trades=db.IntegerProperty(default=10)

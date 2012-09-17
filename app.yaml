@@ -27,8 +27,11 @@ handlers:
   static_dir: static
   
 - url: /worker.*
-  static_dir: scripts.worker.app
+  script: scripts.worker.app
   login: admin
+
+- url: /league.*
+  script: scripts.league.app
   
 - url: /api.*
   script: scripts.api.app
