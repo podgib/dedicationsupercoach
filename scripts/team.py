@@ -60,7 +60,7 @@ class SelectHandler(webapp2.RequestHandler):
     if captain[0] == 'bowl' and captain[1] not in selected_bowlers:
       self.response.out.write("Error: captain must be a member of team")
       return
-    if captain[0] == 'field' and captain[1] not in selected_fielders:
+    if captain[0] == 'field' and captain[1] not in selected_fieldsmen:
       self.response.out.write("Error: captain must be a member of team")
       return
     team.captain_type=db.Category(captain[0])
