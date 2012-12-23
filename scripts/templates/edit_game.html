@@ -27,11 +27,11 @@
     {% endfor %}
   </select></td>
   <td><input type=checkbox name="batsman-{{i}}-batted"{% if disp %}checked{% endif %}></input></td>
-  <td><input type=text name="batsman-{{i}}-runs" {% if disp %}value={{b.runs}}{% endif %}></input></td>
+  <td><input type=text name="batsman-{{i}}-runs" value={% if disp %}{{b.runs}}{% else %}0{% endif %}></input></td>
   <td><input type=checkbox name="batsman-{{i}}-not_out" {% if disp and b.not_out %}checked{% endif %}></input></td>
-  <td><input type=text name="batsman-{{i}}-balls"{% if disp %}value={{b.balls_faced}}{% endif %}></input></td>
-  <td><input type=text name="batsman-{{i}}-fours"{% if disp %}value={{b.fours_hit}}{% endif %}></input></td>
-  <td><input type=text name="batsman-{{i}}-sixes"{% if disp %}value={{b.sixes_hit}}{% endif %}></input></td>
+  <td><input type=text name="batsman-{{i}}-balls" value={% if disp %}{{b.balls_faced}}{% else %}0{% endif %}></input></td>
+  <td><input type=text name="batsman-{{i}}-fours" value={% if disp %}{{b.fours_hit}}{% else %}0{% endif %}></input></td>
+  <td><input type=text name="batsman-{{i}}-sixes" value={% if disp %}{{b.sixes_hit}}{% else %}0{% endif %}></input></td>
   <td><select name="batsman-{{i}}-how_out">
     <option value=""></option>
     {% for d in dismissal_types %}<option value={{d|replace(" ","-")}} {% if disp and b.how_out==d %}selected{% endif %}>{{d}}</option>{% endfor %}
@@ -54,14 +54,14 @@
     {% endfor %}
   </select></td>
   <td><input type=checkbox name="bowler-{{i}}-bowled" {% if disp %}checked{% endif %}></input></td>
-  <td><input type=text name="bowler-{{i}}-overs" {% if disp %}value={{b.overs}}.{{b.balls}}{% endif %}></input></td>
-  <td><input type=text name="bowler-{{i}}-maidens" {% if disp %}value={{b.maidens}}{% endif %}></input></td>
-  <td><input type=text name="bowler-{{i}}-runs" {% if disp %}value={{b.runs_conceded}}{% endif %}></input></td>
-  <td><input type=text name="bowler-{{i}}-wickets" {% if disp %}value={{b.wickets}}{% endif %}></input></td>
-  <td><input type=text name="bowler-{{i}}-wides" {% if disp %}value={{b.wides}}{% endif %}></input></td>
-  <td><input type=text name="bowler-{{i}}-no_balls" {% if disp %}value={{b.no_balls}}{% endif %}></input></td>
-  <td><input type=text name="bowler-{{i}}-fours" {% if disp %}value={{b.fours}}{% endif %}></input></td>
-  <td><input type=text name="bowler-{{i}}-sixes" {% if disp %}value={{b.sixes}}{% endif %}></input></td>
+  <td><input type=text name="bowler-{{i}}-overs" value={% if disp %}{{b.overs}}.{{b.balls}}{% else %}0{% endif %}></input></td>
+  <td><input type=text name="bowler-{{i}}-maidens" value={% if disp %}{{b.maidens}}{% else %}0{% endif %}></input></td>
+  <td><input type=text name="bowler-{{i}}-runs" value={% if disp %}{{b.runs_conceded}}{% else %}0{% endif %}></input></td>
+  <td><input type=text name="bowler-{{i}}-wickets" value={% if disp %}{{b.wickets}}{% else %}0{% endif %}></input></td>
+  <td><input type=text name="bowler-{{i}}-wides" value={% if disp %}{{b.wides}}{% else %}0{% endif %}></input></td>
+  <td><input type=text name="bowler-{{i}}-no_balls" value={% if disp %}{{b.no_balls}}{% else %}0{% endif %}></input></td>
+  <td><input type=text name="bowler-{{i}}-fours" value={% if disp %}{{b.fours}}{% else %}0{% endif %}></input></td>
+  <td><input type=text name="bowler-{{i}}-sixes" value={% if disp %}{{b.sixes}}{% else %}0{% endif %}></input></td>
 </tr>
 {% endfor %}
 </table>
@@ -77,13 +77,13 @@
     {% for p in players %}<option value={{p.key().id()}} {% if f and f.player.key()==p.key() %}selected{% endif %}>{{p.first_name}} {{p.surname}}</option>
     {% endfor %}
   </select></td>
-  <td><input type=text name="fielder-{{i}}-catches" {% if f %}value={{f.catches}}{% endif %}></input></td>
-  <td><input type=text name="fielder-{{i}}-run_outs" {% if f %}value={{f.run_outs}}{% endif %}></input></td>
-  <td><input type=text name="fielder-{{i}}-misfields" {% if f %}value={{f.misfields}}{% endif %}></input></td>
-  <td><input type=text name="fielder-{{i}}-drops" {% if f %}value={{f.drops}}{% endif %}></input></td>
-  <td><input type=text name="fielder-{{i}}-diving" {% if f %}value={{f.diving_drops}}{% endif %}></input></td>
-  <td><input type=text name="fielder-{{i}}-non_attempts" {% if f %}value={{f.non_attempts}}{% endif %}></input></td>
-  <td><input type=text name="fielder-{{i}}-other"{% if f %}value={{f.other}}{% endif %}></input></td>
+  <td><input type=text name="fielder-{{i}}-catches" value={% if f %}{{f.catches}}{% else %}0{% endif %}></input></td>
+  <td><input type=text name="fielder-{{i}}-run_outs" value={% if f %}{{f.run_outs}}{% else %}0{% endif %}></input></td>
+  <td><input type=text name="fielder-{{i}}-misfields" value={% if f %}{{f.misfields}}{% else %}0{% endif %}></input></td>
+  <td><input type=text name="fielder-{{i}}-drops" value={% if f %}{{f.drops}}{% else %}0{% endif %}></input></td>
+  <td><input type=text name="fielder-{{i}}-diving" value={% if f %}{{f.diving_drops}}{% else %}0{% endif %}></input></td>
+  <td><input type=text name="fielder-{{i}}-non_attempts" value={% if f %}{{f.non_attempts}}{% else %}0{% endif %}></input></td>
+  <td><input type=text name="fielder-{{i}}-other" value={% if f %}{{f.other}}{% else %}0{% endif %}></input></td>
 </tr>
 {% endfor %}
 </table>
