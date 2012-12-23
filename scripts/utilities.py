@@ -141,5 +141,6 @@ def selected_available(selected_keys,active_only=True):
   return (selected,available)
   
 def check_mobile():
-  agent=webapp2.get_request().user_agent.lower()
-  return agent.find('mobi') >= 0 and agent.find('ipad') < 0
+  return False
+  #agent=webapp2.get_request().user_agent.lower()
+  #return agent.find('mobi') >= 0 and agent.find('ipad') < 0
