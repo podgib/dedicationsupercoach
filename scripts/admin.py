@@ -182,7 +182,10 @@ class EditGameHandler(webapp2.RequestHandler):
     if bat_total > 0:    
       bat_factor = 100.0/bat_total
     if bowl_total > 0:
-      bowl_factor = 100.0/bowl_total
+      if game.overs == 20:
+        bowl_factor = 80.0/bowl_total
+      else:
+        bowl_factor = 100.0/bowl_total
     for key,pg in players.iteritems():
       pg.batting_points=int(round(bat_scores[key]*bat_factor))
       pg.bowling_points=int(round(bowl_scores[key]*bowl_factor))
