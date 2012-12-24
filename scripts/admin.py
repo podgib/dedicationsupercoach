@@ -83,6 +83,7 @@ class EditGameHandler(webapp2.RequestHandler):
       self.response.out.write("Error. Duplicate fielders")
       return
     
+    memcache.delete('horse')
     pg=None
     # batting
     for i in range(1,12):
@@ -209,23 +210,28 @@ class HorseHandler(webapp2.RequestHandler):
     check_admin(self)
     template_values={'user_meta':get_meta()}
     
-    players=Player.all().run()
-    player_scores=[]
-    for p in players:
-      score=0
-      games=p.playergame_set
-      for g in games:
-        if g.batted and not g.not_out and g.how_out == 'bowled':
-          score += 1
-        if g.batted and g.runs == 0 and not g.not_out:
-          if g.balls_faced <= 1:
-            score += 4
-          else:
-            score += 3
-        score += 2*g.sixes
-        score += 4*g.drops + g.diving_drops + 5*g.non_attempts + g.misfields + g.other
-      player_scores.append([p.first_name + ' ' + p.surname,score])
-    template_values['player_scores']=sorted(player_scores,key=lambda player: -player[1])
+    player_scores = memcache.get('horse')
+    if player_scores is None:    
+      players=Player.all().run()
+      player_scores=[]
+      for p in players:
+        score=0
+        games=p.playergame_set
+        for g in games:
+          if g.batted and not g.not_out and g.how_out == 'bowled':
+            score += 1
+          if g.batted and g.runs == 0 and not g.not_out:
+            if g.balls_faced <= 1:
+              score += 4
+            else:
+              score += 3
+          score += 2*g.sixes
+          score += 4*g.drops + g.diving_drops + 5*g.non_attempts + g.misfields + g.other
+        player_scores.append([p.first_name + ' ' + p.surname,score])
+        player_scores=sorted(player_scores,key=lambda player: -player[1])
+      memcache.add('horse',player_scores)
+        
+    template_values['player_scores']=player_scores
     template=jinja_environment.get_template('templates/horse.html')
     self.response.out.write(template.render(template_values))
     
