@@ -111,7 +111,7 @@ def game_completed(game):
     memcache.set("next_game",next_game)
     if utilities.next_game:
       utilities.current_round=utilities.next_game.round
-      memcache.set("current_round",utilites.current_round)
+      memcache.set("current_round",utilities.current_round)
     utilities.lockout=False
     memcache.set("lockout",False)
     utilities.put()
