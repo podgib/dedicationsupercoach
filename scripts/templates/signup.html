@@ -9,12 +9,15 @@
   <table id=signup>
     <tr><td><label for=first_name>First Name</label></td><td><input name="first_name" value="{{first_name}}"></input></td></tr>
     <tr><td><label for=surname>Surname</label></td><td><input name="surname" value="{{surname}}"></input></td></tr>
-    <tr><td><label for=team_name>Team Name</label></td><td><input name="team_name"></input></td></tr>
+    <tr><td><label for=team_name>Team Name</label></td><td><input name="team_name" value="."></input></td></tr>
   </table>
   <input type="submit" value="Sign me up!"></input>
   </form>
   <script type="text/javascript">
     $(function()  {
+      $('input:submit').button();
+    });
+    /*$(function()  {
       $('input:submit').button({disabled: true});
       $('input').keypress(function()  {
         if ($('input[name="first_name"]').val() != '' && $('input[name="surname"]').val() != '' && $('input[name="team_name"]').val() != '')
@@ -22,6 +25,6 @@
         else
           $('input:submit').button({disabled: true});
       });
-    });
+    });*/
   </script>
 {% endblock %}

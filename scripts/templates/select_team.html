@@ -21,25 +21,25 @@
   <div id=fielding-progress class=progressbar></div>
   </div>
   <p>Please select five batsmen, three bowlers and three fielders. You may select the same player in more than one category if you wish. Also select one player (in one category) as your captain - they will score double points.</p>
-  <p id="scoring-link"><a href="#">Click here</a> for details on scoring</p>
+  <p id="scoring-link"><a href="#">Click here</a> for details on scoring</p>. Click on players for information about them.
   <form action="/team/select" method="POST">
   <h2>Batting</h2>
   <table class=player-list>
   <tr><th></th><th>Name</th><th>Price</th><th>Captain</th></tr>
   {% for player in players %}
-  <tr><td><input type="checkbox" name="batting" value={{player.key()}} price={{player.batting_price}}></input></td><td>{{player.first_name}} {{player.surname}}</td><td>${{player.batting_price}}</td><td><input type="radio" name="captain" value="bat:{{player.key()}}" disabled></input></td></tr>
+  <tr><td><input type="checkbox" name="batting" value={{player.key()}} price={{player.batting_price}}></input></td><td><a href="#" onclick="loadPlayer({{player.key().id()}})">{{player.first_name}} {{player.surname}}</a></td><td>${{player.batting_price}}</td><td><input type="radio" name="captain" value="bat:{{player.key()}}" disabled></input></td></tr>
   {% endfor %}
   </table>
   <h2>Bowling</h2>
   <table class=player-list>
   {% for player in players %}
-  <tr><td><input type="checkbox" name="bowling" value={{player.key()}} price={{player.bowling_price}}></input></td><td>{{player.first_name}} {{player.surname}}</td><td>${{player.bowling_price}}</td><td><input type="radio" name="captain" value="bowl:{{player.key()}}" disabled></input></td></tr>
+  <tr><td><input type="checkbox" name="bowling" value={{player.key()}} price={{player.bowling_price}}></input></td><td><a href="#" onclick="loadPlayer({{player.key().id()}})">{{player.first_name}} {{player.surname}}</a></td><td>${{player.bowling_price}}</td><td><input type="radio" name="captain" value="bowl:{{player.key()}}" disabled></input></td></tr>
   {% endfor %}
   </table>
   <h2>Fielding</h2>
   <table class=player-list>
   {% for player in players %}
-  <tr><td><input type="checkbox" name="fielding" value={{player.key()}} price={{player.fielding_price}}></input></td><td>{{player.first_name}} {{player.surname}}</td><td>${{player.fielding_price}}</td><td><input type="radio" name="captain" value="field:{{player.key()}}" disabled></input></td></tr>
+  <tr><td><input type="checkbox" name="fielding" value={{player.key()}} price={{player.fielding_price}}></input></td><td><a href="#" onclick="loadPlayer({{player.key().id()}})">{{player.first_name}} {{player.surname}}</a></td><td>${{player.fielding_price}}</td><td><input type="radio" name="captain" value="field:{{player.key()}}" disabled></input></td></tr>
   {% endfor %}
   </table>
   <input type="submit" value="Done">
@@ -103,10 +103,19 @@
     <p>Each fielder starts with 11 points, and gets points for: catches (3), run outs (3), dropped catches (-5), non-attempts (-5), diving drops (-3), 
       misfields (-2) and other indiscretions (-1).</p>
   </div>
+  <div id="player-dialog" class="dialog" title=""></div>
   
   <script>
+  function loadPlayer(id) {
+    $("#player-dialog").dialog("open");
+    $.get("/players/"+id,{"noLayout": "true"},
+      function(data)  {
+        $("#player-dialog").html(data);
+      });
+  }
   $("#score-dialog").dialog({autoOpen: false, modal: true});
   $("#scoring-link").click(function() {
     $("#score-dialog").dialog("open");});
+  $("#player-dialog").dialog({autoOpen: false, modal: true});
   </script>
 {% endblock %}
