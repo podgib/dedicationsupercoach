@@ -74,7 +74,7 @@
 <tr>
   <td><select name="fielder-{{i}}">
     <option value="0"></option>
-    {% for p in players %}<option value={{p.key().id()}} {% if f and f.player.key()==p.key() %}selected{% endif %}>{{p.first_name}} {{p.surname}}</option>
+    {% for p in players %}<option value={{p.key().id()}} {% if f and f.player.key()== p.key() %}selected{% endif %}>{{p.first_name}} {{p.surname}}</option>
     {% endfor %}
   </select></td>
   <td><input type=text name="fielder-{{i}}-catches" value={% if f %}{{f.catches}}{% else %}0{% endif %}></input></td>

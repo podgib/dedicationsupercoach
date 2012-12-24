@@ -1,0 +1,9 @@
+{% extends "templates/layout.html" %}
+{% block content %}
+<h1>Reset system</h1>
+To reset the system, type 'RESET' (all caps) in the box below and press submit. WARNING: this can not be undone!
+<form method="POST" action="/admin/reset">
+<input type="text" name="code"></input>
+<input type="submit" value="Reset"></input>
+</form>
+{% endblock %}

@@ -3,6 +3,9 @@
 <h1>Admin Menu</h1>
 <p>Current state: {% if lockout %}Locked Out{% else %}Trades Open{% endif %} | 
   <a href='/admin/toggle_lockout'>{% if lockout %}Open Trades{% else %}Lock{% endif %}</a></p>
+
+<p>Reset System: <a href='/admin/reset'>Click here</a></p>
+<p><a href='/admin/horse'>Horse's Ass Scores</a></p>
   
 <h2>Games</h2>
 {% for game in games %}

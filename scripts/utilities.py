@@ -104,7 +104,8 @@ def next_game():
 def game_completed(game):
   utilities=Utilities.all().get()
   next_game=Game.all().filter('round =',utilities.next_game.round+1).get()
-  team.finish_round(game,next_game)
+  if next_game:
+    team.finish_round(game,next_game)
   game.played=True
   if game.key() == utilities.next_game.key():
     utilities.next_game=next_game

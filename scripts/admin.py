@@ -11,6 +11,7 @@ from objects.player import Player
 from objects.player import PlayerGame
 from objects.team import Team
 from objects.game import Game
+from google.appengine.api import memcache
 import utilities
 from utilities import *
 from google.appengine.api import users
@@ -45,7 +46,7 @@ class EditGameHandler(webapp2.RequestHandler):
     check_admin(self)
     game=Game.get_by_id(int(game_id))
     players=Player.all().filter('active =',True).order('surname').fetch(1000)
-    fielders=PlayerGame.all().filter('game =',game) 
+    fielders=PlayerGame.all().filter('game =',game)
     batting_order=sorted(fielders,key=lambda p: p.batting_position)
     bowling_order=sorted(fielders,key=lambda p: p.bowling_position)
     template_values={'user_meta':get_meta(),'game':game,'players':players,'dismissal_types':dismissal_types,'batting_order':batting_order,'bowling_order':bowling_order,
@@ -201,7 +202,93 @@ class EditGameHandler(webapp2.RequestHandler):
     game.result=self.request.get('result')
     game.put()
     
-    self.redirect('/admin')   
+    self.redirect('/admin')
+  
+class HorseHandler(webapp2.RequestHandler):
+  def get(self):
+    check_admin(self)
+    template_values={'user_meta':get_meta()}
+    
+    players=Player.all().run()
+    player_scores=[]
+    for p in players:
+      score=0
+      games=p.playergame_set
+      for g in games:
+        if g.batted and not g.not_out and g.how_out == 'bowled':
+          score += 1
+        if g.batted and g.runs == 0 and not g.not_out:
+          if g.balls_faced <= 1:
+            score += 4
+          else:
+            score += 3
+        score += 2*g.sixes
+        score += 4*g.drops + g.diving_drops + 5*g.non_attempts + g.misfields + g.other
+      player_scores.append([p.first_name + ' ' + p.surname,score])
+    template_values['player_scores']=sorted(player_scores,key=lambda player: -player[1])
+    template=jinja_environment.get_template('templates/horse.html')
+    self.response.out.write(template.render(template_values))
+    
+
+class ResetHandler(webapp2.RequestHandler):
+  def get(self):
+    check_admin(self)
+    template_values={'user_meta':get_meta()}
+    template=jinja_environment.get_template('templates/reset.html')
+    self.response.out.write(template.render(template_values))
+    
+  def post(self):
+    if self.request.get('code')!='RESET':
+      return self.response.out.write("Reset failed. No harm done")
+    check_admin(self)
+    players=Player.all().run()
+    for p in players:
+      p.batting_price=p.initial_batting_price
+      p.bowling_price=p.initial_bowling_price
+      p.fielding_price=p.initial_fielding_price
+      p.put()
+		
+    usermetas=UserMeta.all().run()
+    for u in usermetas:
+      u.total_trades=10
+      u.round_trades=2
+      u.total_points=0
+      u.put()
+    
+    teams=Team.all().run()
+    for t in teams:
+      if t.game.round > 1:
+        t.delete()
+      else:
+        t.batting_score=0
+        t.bowling_score=0
+        t.fielding_score=0
+        t.total_score=0
+        t.put()
+        
+    playergames=PlayerGame.all().run()
+    for p in playergames:
+      p.delete()
+      
+    games=Game.all().run()
+    for g in games:
+      g.played=False
+      g.result='tie'
+      g.score="0/0"
+      g.opposition_score="0/0"
+      g.batExtras=0
+      g.bowlExtras=0
+      g.put()
+      
+    u=Utilities.all().get()
+    u.current_round=1
+    u.next_game=Game.all().filter('round =',1).get()
+    u.lockout=False
+    u.put()
+    
+    memcache.flush_all()
+    self.response.out.write('System reset. I hope you meant to do that!');
+
 
 class InitHandler(webapp2.RequestHandler):
   def get(self):
@@ -231,7 +318,8 @@ class InitHandler(webapp2.RequestHandler):
     player.put()
 
 app = webapp2.WSGIApplication([('/admin',MenuHandler),
-                               ('/admin/init',InitHandler),
                                ('/admin/toggle_lockout',toggle_lockout),
                                ('/admin/game',EditGameHandler),
+                               ('/admin/reset',ResetHandler),
+                               ('/admin/horse',HorseHandler),
                                webapp2.Route('/admin/game/<game_id>',handler=EditGameHandler)],debug=True)

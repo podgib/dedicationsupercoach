@@ -1,0 +1,10 @@
+{% extends "templates/layout.html" %}
+{% block content %}
+<h1>Horse's Ass Award</h1>
+<table class=stats>
+<tr><th>Rank</th><th>Player</th><th>Points</th></tr>
+{% for p in player_scores %}
+<tr><td>{{loop.index}}<td>{{p[0]}}</td><td>{{p[1]}}</td></tr>
+{% endfor %}
+</table>
+{% endblock %}
