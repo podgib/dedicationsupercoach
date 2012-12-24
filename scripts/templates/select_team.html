@@ -21,6 +21,7 @@
   <div id=fielding-progress class=progressbar></div>
   </div>
   <p>Please select five batsmen, three bowlers and three fielders. You may select the same player in more than one category if you wish. Also select one player (in one category) as your captain - they will score double points.</p>
+  <p id="scoring-link"><a href="#">Click here</a> for details on scoring</p>
   <form action="/team/select" method="POST">
   <h2>Batting</h2>
   <table class=player-list>
@@ -91,5 +92,21 @@
       $(".progressbar").progressbar({value: 0});  
       $("#content").css("margin-right","250px");
     });   
+  </script>
+  <div id="score-dialog" class="dialog" title="Scoring">
+    <h2>Batting:</h2>
+    <p>1 point per run, 2 points per four, 4 points per six. Sum for all batsmen is scaled to 100 points in each game.</p>
+    <h2>Bowling:</h2>
+    <p>Base score = total runs conceded by team/bowler's economy rate. Bonus points: wicket=20, maiden=10, wide/no-ball=-5. Sum for all bowlers
+      is scaled to 100 points in each game.</p>
+    <h2>Fielding:</h2>
+    <p>Each fielder starts with 11 points, and gets points for: catches (3), run outs (3), dropped catches (-5), non-attempts (-5), diving drops (-3), 
+      misfields (-2) and other indiscretions (-1).</p>
+  </div>
+  
+  <script>
+  $("#score-dialog").dialog({autoOpen: false, modal: true});
+  $("#scoring-link").click(function() {
+    $("#score-dialog").dialog("open");});
   </script>
 {% endblock %}
