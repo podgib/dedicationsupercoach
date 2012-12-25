@@ -21,7 +21,7 @@ class Team(db.Model):
 
   def copy_to_next_round(self):
     game=Game.all().filter('round =',self.game.round+1).get()
-    t=Team(user=self.user,batsmen=self.batsmen,bowlers=self.bowlers,fielders=self.fielders,game=game,captain=self.captain)
+    t=Team(user=self.user,batsmen=self.batsmen,bowlers=self.bowlers,fielders=self.fielders,game=game,captain=self.captain,captain_type=self.captain_type)
     t.put()
     self.user.round_trades = min(self.user.total_trades,2)
 

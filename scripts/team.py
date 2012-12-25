@@ -85,6 +85,10 @@ class SelectHandler(webapp2.RequestHandler):
       self.response.out.write("You went over budget")
       return
       
+    if team.game.round > 1:
+      team1=Team(user=team.user,game=Game.all().filter('round =',1).get(),batsmen=team.batsmen,bowlers=team.bowlers,fielders=team.fielders,captain=team.captain,captain_type=team.captain_type)
+      team1.put()
+      
     team.put()
     user_meta.budget = budget
     save_user(user_meta)
