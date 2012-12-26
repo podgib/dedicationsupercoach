@@ -297,6 +297,26 @@ class ResetHandler(webapp2.RequestHandler):
     
     memcache.flush_all()
     self.response.out.write('System reset. I hope you meant to do that!');
+    
+class ScriptHandler(webapp2.RequestHandler):
+  def get(self):
+    check_admin(self)
+    us=UserMeta.all().run()
+    for u in us:
+      budget=209000
+      team=Team.all().filter('user =',u).get()
+      if team:
+        for k in team.batsmen:
+          p=db.get(k)
+          budget -= p.batting_price
+        for k in team.bowlers:
+          p=db.get(k)
+          budget -= p.bowling_price
+        for k in team.fielders:
+          p=db.get(k)
+          budget -= p.fielding_price
+        u.budget = budget
+        save_user(u)
 
 
 class InitHandler(webapp2.RequestHandler):
@@ -331,4 +351,5 @@ app = webapp2.WSGIApplication([('/admin',MenuHandler),
                                ('/admin/game',EditGameHandler),
                                ('/admin/reset',ResetHandler),
                                ('/admin/horse',HorseHandler),
+                               ('/admin/script',ScriptHandler),
                                webapp2.Route('/admin/game/<game_id>',handler=EditGameHandler)],debug=True)

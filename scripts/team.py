@@ -85,9 +85,9 @@ class SelectHandler(webapp2.RequestHandler):
       self.response.out.write("You went over budget")
       return
       
-    if team.game.round > 1:
-      team1=Team(user=team.user,game=Game.all().filter('round =',1).get(),batsmen=team.batsmen,bowlers=team.bowlers,fielders=team.fielders,captain=team.captain,captain_type=team.captain_type)
-      team1.put()
+    #if team.game.round > 1:
+    #  team1=Team(user=team.user,game=Game.all().filter('round =',1).get(),batsmen=team.batsmen,bowlers=team.bowlers,fielders=team.fielders,captain=team.captain,captain_type=team.captain_type)
+    #  team1.put()
       
     team.put()
     user_meta.budget = budget
@@ -248,21 +248,21 @@ class EditHandler(webapp2.RequestHandler):
       if team.drop_player(player,'batsman'):
         budget += player.batting_price
       else:
-        self.response.out.write("Error")
+        self.response.out.write("Error: dropped player not in team")
         return
     for p in dropped_bowlers:
       player = Player.get_by_id(int(p))
       if team.drop_player(player,'bowler'):
         budget += player.bowling_price
       else:
-        self.response.out.write("Error")
+        self.response.out.write("Error: dropped player not in team")
         return
     for p in dropped_fielders:
       player = Player.get_by_id(int(p))
       if team.drop_player(player,'fielder'):
         budget += player.fielding_price
       else:
-        self.response.out.write("Error")
+        self.response.out.write("Error: dropped player not in team")
         return
     for p in picked_batsmen:
       player = Player.get_by_id(int(p))
@@ -274,14 +274,14 @@ class EditHandler(webapp2.RequestHandler):
     for p in picked_bowlers:
       player = Player.get_by_id(int(p))
       if team.pick_player(player,'bowler'):
-        budget += player.bowling_price
+        budget -= player.bowling_price
       else:
         self.response.out.write("Error")
         return
     for p in picked_fielders:
       player = Player.get_by_id(int(p))
       if team.pick_player(player,'fielder'):
-        budget += player.fielding_price
+        budget -= player.fielding_price
       else:
         self.response.out.write("Error")
         return
