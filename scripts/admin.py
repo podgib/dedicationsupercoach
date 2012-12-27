@@ -229,7 +229,7 @@ class HorseHandler(webapp2.RequestHandler):
             else:
               score += 3
           score += 2*g.sixes
-          score += 4*g.drops + g.diving_drops + 5*g.non_attempts + g.misfields + g.other
+          score += 3*g.drops + g.diving_drops + 4*g.non_attempts + g.misfields + g.other
         player_scores.append([p.first_name + ' ' + p.surname,score])
         player_scores=sorted(player_scores,key=lambda player: -player[1])
       memcache.add('horse',player_scores)
