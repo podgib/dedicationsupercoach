@@ -34,7 +34,7 @@ class Team(db.Model):
     batsmen=PlayerGame.all().filter("game =",self.game).filter("player IN",self.batsmen).run()
     bowlers=PlayerGame.all().filter("game =",self.game).filter("player IN",self.bowlers).run()
     fielders=PlayerGame.all().filter("game =",self.game).filter("player IN",self.fielders).run()
-    captain=PlayerGame.all().filter("game =",self.game).filter("player =",self.captain).fetch(1)[0]
+    captain=PlayerGame.all().filter("game =",self.game).filter("player =",self.captain).get()
     for b in batsmen:
       batting_score+=b.batting_points
     for b in bowlers:
