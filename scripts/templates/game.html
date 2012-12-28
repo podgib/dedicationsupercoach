@@ -31,7 +31,7 @@
 <tr><th>Player</th><th>Overs</th><th>Maidens</th><th>Runs</th><th>Wickets</th><th>Average</th><th>Strike Rate</th><th>Economy Rate</th><th>Wides</th><th>No Balls</th><th>Fours</th><th>Sixes</th><th>Points</th></tr>
 {% for p in bowlers %}
 <tr><td>{{p.player.first_name}} {{p.player.surname}}</td>{% if p.bowled %}
-  <td>{{p.overs}}.{{p.balls}}</td><td>{{p.maidens}}</td><td>{{p.runs_conceded}}</td><td>{{p.wickets}}</td><td>{% if p.wickets > 0 %}{{"%.2f"|format(p.runs_conceded/p.wickets)}}{% else %}-{% endif %}</td><td>{% if p.wickets > 0 %}{{"%.2f"|format((6*p.overs+p.balls)/p.wickets)}}{% else %}-{% endif %}</td><td>{% if p.overs+p.balls > 0 %}{{"%.2f"|format(p.runs_conceded/(6*p.overs+p.balls))}}{% else %}-{% endif %}</td><td>{{p.wides}}</td><td>{{p.no_balls}}</td><td>{{p.fours}}</td><td>{{p.sixes}}</td><td>{{p.bowling_points}}</td>
+  <td>{{p.overs}}.{{p.balls}}</td><td>{{p.maidens}}</td><td>{{p.runs_conceded}}</td><td>{{p.wickets}}</td><td>{% if p.wickets > 0 %}{{"%.2f"|format(p.runs_conceded/p.wickets)}}{% else %}-{% endif %}</td><td>{% if p.wickets > 0 %}{{"%.2f"|format((6*p.overs+p.balls)/p.wickets)}}{% else %}-{% endif %}</td><td>{% if p.overs+p.balls > 0 %}{{"%.2f"|format(6*p.runs_conceded/(6*p.overs+p.balls))}}{% else %}-{% endif %}</td><td>{{p.wides}}</td><td>{{p.no_balls}}</td><td>{{p.fours}}</td><td>{{p.sixes}}</td><td>{{p.bowling_points}}</td>
   {% else %}<td colspan=3>DNB</td>{% endif %}
 </tr>
 {% endfor %}

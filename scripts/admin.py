@@ -221,7 +221,7 @@ class HorseHandler(webapp2.RequestHandler):
         score=0
         games=p.playergame_set
         for g in games:
-          if g.batted and not g.not_out and g.how_out == 'bowled':
+          if g.batted and not g.not_out and g.how_out == 'Bowled':
             score += 1
           if g.batted and g.runs == 0 and not g.not_out:
             if g.balls_faced <= 1:
