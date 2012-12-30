@@ -39,9 +39,14 @@ class ListHandler(webapp2.RequestHandler):
     if not user_meta:
       self.redirect("/")
     next=next_game()
+    if next:
+      next_round = next.round
+    else:
+      next_round = 1000
     template_values={'user_meta':user_meta,'next_game':next,'lockout':lockout()}
-    template_values['future_games']=Game.all().filter('round >',next.round).order('round').run()
-    template_values['past_games']=Game.all().filter('round <',next.round).order('round').run()
+    template_values['future_games']=Game.all().filter('round >',next_round).order('round').run()
+    template_values['future_games']=[]
+    template_values['past_games']=Game.all().filter('round <',next_round).order('round').run()
     if check_mobile():
       template=jinja_environment.get_template('templates/mobile/games.html')
     else:

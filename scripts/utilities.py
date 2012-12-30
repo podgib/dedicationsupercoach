@@ -13,7 +13,7 @@ FACEBOOK_APP_ID="383493568371686"
 FACEBOOK_APP_SECRET="1db733ef265fda306c9782747ae76e75"
 dev_server=os.environ.get('SERVER_SOFTWARE','').startswith('Development')
 
-dismissal_types=["Bowled","Caught","Run out","LBW","Stumped","Timed Out","Handling the ball"]
+dismissal_types=["Bowled","Caught","Run out","LBW","Stumped","Hit Wicket","Timed Out","Handling the ball"]
 
 class Utilities(db.Model):
   current_round=db.IntegerProperty(default=1)
@@ -104,8 +104,7 @@ def next_game():
 def game_completed(game):
   utilities=Utilities.all().get()
   next_game=Game.all().filter('round =',utilities.next_game.round+1).get()
-  if next_game:
-    team.finish_round(game,next_game)
+  team.finish_round(game,next_game)
   game.played=True
   if game.key() == utilities.next_game.key():
     utilities.next_game=next_game
@@ -113,11 +112,16 @@ def game_completed(game):
     if utilities.next_game:
       utilities.current_round=utilities.next_game.round
       memcache.set("current_round",utilities.current_round)
+    else:
+      utilities.current_round=-1
+      memcache.set("current_round",-1)
     utilities.lockout=False
     memcache.set("lockout",False)
     utilities.put()
     for u in UserMeta.all().run():
       u.round_trades=2
+      if utilities.current_round == -1:
+        u.round_trades=0
       save_user(u)
   
 def get_team(user_meta=None,game=None):

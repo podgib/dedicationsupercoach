@@ -145,9 +145,12 @@ class ViewHandler(webapp2.RequestHandler):
     else:
       team_user = get_meta()
     game=next_game()
+    round=current_round()-1
+    if round < 0:
+      round = 5
     if not game:
-      game=Game.all().filter("round =", current_round()-1).get()
-      
+      game=Game.all().filter("round =", round).get()
+    
     team=get_team(team_user,game)
     if not team:
       if team_user.key()!=user_meta.key():

@@ -214,7 +214,7 @@ class HorseHandler(webapp2.RequestHandler):
     template_values={'user_meta':get_meta()}
     
     player_scores = memcache.get('horse')
-    if player_scores is None:    
+    if player_scores is None:
       players=Player.all().run()
       player_scores=[]
       for p in players:
@@ -225,11 +225,11 @@ class HorseHandler(webapp2.RequestHandler):
             score += 1
           if g.batted and g.runs == 0 and not g.not_out:
             if g.balls_faced <= 1:
-              score += 4
+              score += 5
             else:
               score += 3
           score += 2*g.sixes
-          score += 3*g.drops + g.diving_drops + 4*g.non_attempts + g.misfields + g.other
+          score += 3*g.drops + g.diving_drops + 5*g.non_attempts + g.misfields + g.other
         player_scores.append([p.first_name + ' ' + p.surname,score])
         player_scores=sorted(player_scores,key=lambda player: -player[1])
       memcache.add('horse',player_scores)

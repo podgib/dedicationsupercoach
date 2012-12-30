@@ -88,10 +88,9 @@ class Team(db.Model):
       return True
     
 def finish_round(game,next_game):
-  next_teams=Team.all().filter('game =',next_game).get()
   teams=Team.all().filter('game =',game).run()
   for team in teams:
     team.calculate_scores()
-    if not game.played:
+    if not game.played and next_game:
       team.copy_to_next_round()
 

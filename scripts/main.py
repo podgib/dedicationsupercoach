@@ -120,7 +120,11 @@ class LandingHandler(webapp2.RequestHandler):
         self.response.out.write(template.render(template_values))
         return
       
-      last_game=Game.all().filter('round =',current_round()-1).get()
+      round=current_round()
+      last_round=round-1
+      if last_round < 0:
+        last_round=5
+      last_game=Game.all().filter('round =',last_round).get()
       last_team=get_team(game=last_game)
       round_score=0
       if last_team:
