@@ -1,0 +1,43 @@
+{% extends "templates/public.html" %}
+{% block content %}
+{% for p in players %}
+<br />
+<h1>{{p.first_name}} {{p.surname}}</h1>
+<h2>Batting</h2>
+<table class=stats>
+<tr><td>Runs</td><td>{{p.bat_runs}}</td></tr>
+<tr><td>Innings</td><td>{{p.innings}}</td></tr>
+<tr><td>Not Outs</td><td>{{p.not_outs}}</td></tr>
+<tr><td>Balls Faced</td><td>{{p.balls_faced}}</td></tr>
+<tr><td>Average</td><td>{{"%.2f"|format(p.bat_average)}}</td></tr>
+<tr><td>Highest Score</td><td>{{p.highest_score}}</td></tr>
+<tr><td>Strike Rate</td><td>{{"%.2f"|format(p.bat_strike_rate)}}</td></tr>
+<tr><td>Ducks</td><td>{{p.ducks}}</td></tr>
+<tr><td>Fours</td><td>{{p.bat_fours}}</td></tr>
+<tr><td>Sixes</td><td>{{p.bat_sixes}}</td></tr>
+</table>
+
+<h2>Bowling</h2>
+<table class=stats>
+<tr><td>Overs</td><td>{{p.overs}}</td></tr>
+<tr><td>Maidens</td><td>{{p.maidens}}</td></tr>
+<tr><td>Wickets</td><td>{{p.wickets}}</td></tr>
+<tr><td>Runs</td><td>{{p.bowl_runs}}</td></tr>
+<tr><td>Wides</td><td>{{p.wides}}</td></tr>
+<tr><td>No Balls</td><td>{{p.no_balls}}</td></tr>
+<tr><td>Strike Rate</td><td>{{"%.2f"|format(p.bowl_strike_rate)}}</td></tr>
+<tr><td>Average</td><td>{{"%.2f"|format(p.bowl_average)}}</td></tr>
+<tr><td>Economy Rate</td><td>{{"%.2f"|format(p.economy)}}</td></tr>
+</table>
+
+<h2>Fielding</h2>
+<table class=stats>
+<tr><td>Catches</td><td>{{p.catches}}</td></tr>
+<tr><td>Run Outs</td><td>{{p.run_outs}}</td></tr>
+<tr><td>Misfields</td><td>{{p.misfields}}</td></tr>
+<tr><td>Dropped Catches (Diving)</td><td>{{p.drops}}({{p.diving}})</td></tr>
+<tr><td>Non-attempts</td><td>{{p.non_attempts}}</td></tr>
+<tr><td>Other Mistakes</td><td>{{p.other}}</td></tr>
+</table>
+{% endfor %}
+{% endblock %}
